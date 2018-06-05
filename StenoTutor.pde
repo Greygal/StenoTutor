@@ -89,9 +89,6 @@ ArrayList<String> wordsBlacklist = new ArrayList<String>();
 // Current level
 int currentLevel = 0;
 
-// Lesson completed
-boolean isLessonCompleted = false;
-
 // Unlocked words counter
 int unlockedWords = 0;
 
@@ -460,7 +457,7 @@ float getAverageWpm() {
 // compute the next word based on word stats. Also, if conditions to
 // level up are met, unlock new words.
 void checkBuffer(boolean forceNextWord) {
-  if (buffer.trim().equals(dictionary.get(currentWordIndex).word) || forceNextWord) {
+  if buffer.trim().toUpperCase().equals(dictionary.get(currentWordIndex).word.toUpperCase()) || forceNextWord) {
     buffer = ""; // Clear input buffer
     long typeTime = System.currentTimeMillis();
     wordStats.get(currentWordIndex).typeTime.add(typeTime - lastTypedWordTime);
@@ -516,16 +513,8 @@ void checkLevelUp() {
 // Level up, unlock new words
 void levelUp() {
   int totalWords = startBaseWords + unlockedWords;
-  if (totalWords == dictionary.size()) {
-    if(isLessonCompleted == false) {
-      announceLessonCompleted();
-      isLessonCompleted = true;
-    }
-    return;
-  }
   int i = totalWords;
   unlockedWords += incrementWords;
-  if(startBaseWords + unlockedWords > dictionary.size()) unlockedWords = dictionary.size() - startBaseWords;
   while (totalWords < startBaseWords + unlockedWords && i < dictionary.size()) {
     if (wordsBlacklist.contains(dictionary.get(i).word.trim())) {
       unlockedWords++;
@@ -543,14 +532,6 @@ void levelUp() {
 void announceCurrentLevel() {
   if (isSoundEnabled && isAnnounceLevels) {
     Speaker speaker = new Speaker("Level " + currentLevel, tts);
-    speaker.start();
-  }
-}
-
-// Announce current level
-void announceLessonCompleted() {
-  if (isSoundEnabled && isAnnounceLevels) {
-    Speaker speaker = new Speaker("Lesson completed", tts);
     speaker.start();
   }
 }

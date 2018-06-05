@@ -457,7 +457,7 @@ float getAverageWpm() {
 // compute the next word based on word stats. Also, if conditions to
 // level up are met, unlock new words.
 void checkBuffer(boolean forceNextWord) {
-  if (buffer.trim().equals(dictionary.get(currentWordIndex).word) || forceNextWord) {
+  if buffer.trim().toUpperCase().equals(dictionary.get(currentWordIndex).word.toUpperCase()) || forceNextWord) {
     buffer = ""; // Clear input buffer
     long typeTime = System.currentTimeMillis();
     wordStats.get(currentWordIndex).typeTime.add(typeTime - lastTypedWordTime);
